@@ -1,24 +1,13 @@
-import java.util.Scanner;
+import java.util.*;
 
 public class StringCompression {
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
-        // Read input string
         String S = sc.nextLine();
 
-        // Edge case
-        if (S.length() == 0) {
-            System.out.println("");
-            return;
-        }
-
         StringBuilder compressed = new StringBuilder();
-
         int count = 1;
 
-        // Traverse string
         for (int i = 1; i < S.length(); i++) {
             if (S.charAt(i) == S.charAt(i - 1)) {
                 count++;
@@ -29,17 +18,17 @@ public class StringCompression {
             }
         }
 
-        // Add last character group
-        compressed.append(S.charAt(S.length() - 1));
-        compressed.append(count);
-
-        // Compare lengths
-        if (compressed.length() < S.length()) {
-            System.out.println(compressed.toString());
-        } else {
-            System.out.println(S);
+        // Handle last character group
+        if (S.length() > 0) {
+            compressed.append(S.charAt(S.length() - 1));
+            compressed.append(count);
         }
 
-        sc.close();
+        // Strict condition
+        if (compressed.length() < S.length()) {
+            System.out.print(compressed.toString());
+        } else {
+            System.out.print(S);
+        }
     }
 }
