@@ -1,34 +1,46 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class StringCompression {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String S = sc.nextLine();
+        Scanner scanner = new Scanner(System.in);
+        
+        // Check if input exists
+        if (!scanner.hasNextLine()) {
+            return;
+        }
+        
+        String s = scanner.nextLine();
+        System.out.println(compress(s));
+        
+        scanner.close();
+    }
+
+    public static String compress(String str) {
+        // Edge case: if string is empty or length 1, compression won't help
+        if (str == null || str.length() <= 1) {
+            return str;
+        }
 
         StringBuilder compressed = new StringBuilder();
-        int count = 1;
+        int countConsecutive = 0;
 
-        for (int i = 1; i < S.length(); i++) {
-            if (S.charAt(i) == S.charAt(i - 1)) {
-                count++;
-            } else {
-                compressed.append(S.charAt(i - 1));
-                compressed.append(count);
-                count = 1;
+        for (int i = 0; i < str.length(); i++) {
+            countConsecutive++;
+
+            // If next character is different or we are at the end of the string
+            if (i + 1 >= str.length() || str.charAt(i) != str.charAt(i + 1)) {
+                compressed.append(str.charAt(i));
+                compressed.append(countConsecutive);
+                
+                // Optimization: If at any point compressed is longer than original, 
+                // we could stop, but for simplicity, we check at the end.
+                countConsecutive = 0;
             }
         }
 
-        // Handle last character group
-        if (S.length() > 0) {
-            compressed.append(S.charAt(S.length() - 1));
-            compressed.append(count);
-        }
+        String result = compressed.toString();
 
-        // Strict condition
-        if (compressed.length() < S.length()) {
-            System.out.print(compressed.toString());
-        } else {
-            System.out.print(S);
-        }
+        // Constraint: Return original if compressed is not smaller
+        return result.length() < str.length() ? result : str;
     }
 }
